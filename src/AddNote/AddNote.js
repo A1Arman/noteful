@@ -14,9 +14,39 @@ export default class AddNote extends Component {
       content: '',
       validationMessages: {
         name: ''
-      }
+      },
+      folders: []
     }
   }
+
+  componentDidMount() {
+    const url = 'http://localhost:9090/folders';
+    const options = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+  }
+
+  fetch(url, options)
+      .then(res => {
+        if(res.ok) {
+          return res.json();
+        }
+        else {
+          throw new Error('Something went wrong');
+        }
+      })
+      .then(data => {
+        console.log(data);
+        this.setState({folders: data});
+      })
+      .catch(err => {
+        this.setState({
+          error: err.message
+        });
+      });
+}
 
   nameValidationChange = (name) => {
     this.validateName(name)
@@ -122,7 +152,7 @@ export default class AddNote extends Component {
             </label>
             <select id='note-folder-select' value={this.state.folderId} onChange={folder => this.folderIdChange(folder.target.value)}>
               <option value={null}>...</option>
-              {folders.map(folder =>
+              {this.state.folders.map(folder =>
                 <option key={folder.id} value={folder.id}>
                   {folder.name}
                 </option>
