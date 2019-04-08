@@ -44,6 +44,32 @@ class App extends Component {
           error: err.message
         });
       });
+
+    const notesUrl = 'http://localhost:9090/notes';
+    const notesOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+  }
+
+    fetch(notesUrl, notesOptions)
+      .then(res => {
+        if(res.ok) {
+          return res.json();
+        }
+        else {
+          throw new Error('Something went wrong');
+        }
+      })
+      .then(data => {
+        this.setState({notes: data});
+      })
+      .catch(err => {
+        this.setState({
+          error: err.message
+        });
+      });
   }
 
   renderNavRoutes() {

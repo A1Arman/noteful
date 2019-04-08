@@ -12,10 +12,10 @@ export default class AddNote extends Component {
       modified: '',
       folderId: '',
       content: '',
-      validationMessages: {
-        name: ''
-      },
-      folders: []
+      validate: false,
+      fieldErrors: '',
+      folders: [],
+      folderVal: ''
     }
   }
 
@@ -38,7 +38,6 @@ export default class AddNote extends Component {
         }
       })
       .then(data => {
-        console.log(data);
         this.setState({folders: data});
       })
       .catch(err => {
@@ -66,6 +65,7 @@ export default class AddNote extends Component {
 
   handleSubmition = (e) => {
     this.nameValidationChange(this.state.name);
+    this.validateFolder(this.state.folderId);
     e.preventDefault();
     const note = (({id, name, modified, folderId, content}) => ({id, name, modified, folderId, content}))(this.state);
     const url = 'http://localhost:9090/notes';
@@ -78,7 +78,7 @@ export default class AddNote extends Component {
     }
 
 
-    if(this.state.validationMessages.name) {
+    if(!(this.state.name.length === 0) && !(this.state.folderId === '...') && !(this.state.folderId === '')) {
       fetch(url, options)
       .then(res => {
         if(res.ok) {
@@ -89,7 +89,7 @@ export default class AddNote extends Component {
         }
       })
       .then(data => {
-        this.setState({id: '', name: '', modified: '', folderId: '', content: '', validationMessages: {name: ''}});
+        this.setState({id: '', name: '', modified: '', folderId: '', content: '', validationMessages: {name: ''}, fieldErrors: '', folderVal: ''});
       })
       .catch(err => {
         this.setState({
@@ -105,17 +105,21 @@ export default class AddNote extends Component {
   }
 
   validateName(fieldValue) {
-    const fieldErrors = Object.assign({}, this.state.validationMessages);
-
     fieldValue = fieldValue.trim();
 
-    if(fieldValue.length === 0) {
-      fieldErrors.name = 'Name is required';
-    }
 
-    this.setState({
-      validationMessages: fieldErrors,
-    });
+    if(fieldValue.length === 0) {
+      const error = 'Name is required';
+      this.setState({
+        fieldErrors: error
+      });
+    }
+  }
+
+  validateFolder(folderId) {
+    if(folderId === '...' || folderId === '') {
+      this.setState({folderVal: 'Please select a valid folder'})
+    }
   }
 
   render() {
@@ -134,7 +138,7 @@ export default class AddNote extends Component {
               value={this.state.name}
               onChange={name => this.nameChange(name.target.value)}
               />
-            <span>{this.state.validationMessages.name}</span>
+            <span>{this.state.fieldErrors}</span>
           </div>
           <div className='field'>
             <label htmlFor='note-content-input'>
@@ -158,6 +162,7 @@ export default class AddNote extends Component {
                 </option>
               )}
             </select>
+            <span>{this.state.folderVal}</span>
           </div>
           <div className='buttons'>
             <button type='submit'>

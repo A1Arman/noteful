@@ -6,50 +6,14 @@ import CircleButton from '../CircleButton/CircleButton'
 import NoteError from '../NoteError'
 import PropTypes from 'prop-types'
 import './NoteListMain.css'
+import { faFolder } from '@fortawesome/free-solid-svg-icons';
 
-export default class NoteListMain extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      notes: []
-    }
-  }
-
-  componentDidMount() {
-    const url = 'http://localhost:9090/notes';
-    const options = {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-  }
-
-    fetch(url, options)
-      .then(res => {
-        if(res.ok) {
-          return res.json();
-        }
-        else {
-          throw new Error('Something went wrong');
-        }
-      })
-      .then(data => {
-        console.log(data);
-        this.setState({notes: data});
-      })
-      .catch(err => {
-        this.setState({
-          error: err.message
-        });
-      });
-}
-
-  render() {
+export default function NoteListMain(props) {
     return (
       <section className='NoteListMain'>
         <NoteError>
           <ul>
-            {this.state.notes.map(note =>
+            {props.notes.map(note =>
               <li key={note.id}>
                 <Note
                   id={note.id}
@@ -74,7 +38,6 @@ export default class NoteListMain extends Component {
         </NoteError>
       </section>
     )
-  }
 }
 
 NoteListMain.defaultProps = {
