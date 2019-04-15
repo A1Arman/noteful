@@ -89,7 +89,7 @@ export default class AddNote extends Component {
         }
       })
       .then(data => {
-        this.setState({id: '', name: '', modified: '', folderId: '', content: '', validationMessages: {name: ''}, fieldErrors: '', folderVal: ''});
+        this.setState({id: '', name: '', modified: '', folderId: '', content: '', validationMessages: {name: ''}, fieldErrors: '', folderVal: '',});
       })
       .catch(err => {
         this.setState({

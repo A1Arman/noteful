@@ -11,21 +11,25 @@ import { getNotesForFolder, findNote, findFolder } from '../notes-helpers'
 import './App.css'
 
 class App extends Component {
-  state = {
-    notes: [],
-    folders: []
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      notes: [],
+      folders: [],
+    }
+  }
 
   componentDidMount() {
+    this.fetchNotes();
     // fake date loading from API call
-
     const url = 'http://localhost:9090/folders';
     const options = {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
       }
-  }
+  };
 
   fetch(url, options)
       .then(res => {
@@ -44,7 +48,9 @@ class App extends Component {
           error: err.message
         });
       });
+  }
 
+  fetchNotes() {
     const notesUrl = 'http://localhost:9090/notes';
     const notesOptions = {
       method: 'GET',
@@ -53,7 +59,8 @@ class App extends Component {
       }
   }
 
-    fetch(notesUrl, notesOptions)
+
+      fetch(notesUrl, notesOptions)
       .then(res => {
         if(res.ok) {
           return res.json();
@@ -72,8 +79,9 @@ class App extends Component {
       });
   }
 
+
   renderNavRoutes() {
-    const { notes, folders } = this.state
+    const { notes, folders } = this.state;
     return (
       <>
         {['/', '/folder/:folderId'].map(path =>
@@ -115,8 +123,9 @@ class App extends Component {
       </>
     )
   }
+  
 
-  renderMainRoutes() {
+  renderMainRoutes() {  
     const { notes, folders } = this.state
     return (
       <>
@@ -169,6 +178,7 @@ class App extends Component {
     )
   }
 
+
   render() {
     return (
       <div className='App'>
@@ -184,6 +194,7 @@ class App extends Component {
         </header>
         <main className='App__main'>
           {this.renderMainRoutes()}
+          {this.fetchNotes()}
         </main>
       </div>
     )

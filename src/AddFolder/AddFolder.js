@@ -26,7 +26,9 @@ export default class AddFolder extends Component {
         'Content-Type': 'application/json'
       }
     }
-    fetch(url, options)
+
+    if(this.state.name) {
+      fetch(url, options)
       .then(res => {
         if(res.ok) {
           return res.json();
@@ -43,6 +45,8 @@ export default class AddFolder extends Component {
           error: err.message
         });
       });
+    }
+    
       
   }
 

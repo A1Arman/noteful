@@ -8,12 +8,17 @@ import PropTypes from 'prop-types'
 import './NoteListMain.css'
 import { faFolder } from '@fortawesome/free-solid-svg-icons';
 
-export default function NoteListMain(props) {
+export default class NoteListMain extends Component {
+  componentDidMount() {
+    console.log(this.props)
+  }
+  
+  render() {
     return (
       <section className='NoteListMain'>
         <NoteError>
           <ul>
-            {props.notes.map(note =>
+            {this.props.notes.map(note =>
               <li key={note.id}>
                 <Note
                   id={note.id}
@@ -38,6 +43,7 @@ export default function NoteListMain(props) {
         </NoteError>
       </section>
     )
+  }    
 }
 
 NoteListMain.defaultProps = {
