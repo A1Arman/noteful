@@ -17,7 +17,12 @@ class App extends Component {
     this.state = {
       notes: [],
       folders: [],
+      update: false
     }
+  }
+
+  renderUpdate = () => {
+    window.location.reload(true)
   }
 
   componentDidMount() {
@@ -119,6 +124,7 @@ class App extends Component {
         <Route
           path='/add-note'
           component={NotePageNav}
+          update={() => this.renderUpdate}
         />
       </>
     )
@@ -170,6 +176,7 @@ class App extends Component {
               <AddNote
                 {...routeProps}
                 folders={folders}
+                update={this.renderUpdate}
               />
             )
           }}
@@ -194,7 +201,6 @@ class App extends Component {
         </header>
         <main className='App__main'>
           {this.renderMainRoutes()}
-          {this.fetchNotes()}
         </main>
       </div>
     )

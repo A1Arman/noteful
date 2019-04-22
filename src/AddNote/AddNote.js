@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import NotefulForm from '../NotefulForm/NotefulForm'
 import PropTypes from 'prop-types';
 import './AddNote.css'
+
 
 export default class AddNote extends Component {
   constructor(props) {
@@ -15,6 +17,7 @@ export default class AddNote extends Component {
       validate: false,
       fieldErrors: '',
       folders: [],
+      notes: [],
       folderVal: ''
     }
   }
@@ -47,6 +50,7 @@ export default class AddNote extends Component {
       });
 }
 
+
   nameValidationChange = (name) => {
     this.validateName(name)
   }
@@ -64,9 +68,9 @@ export default class AddNote extends Component {
   }
 
   handleSubmition = (e) => {
+    e.preventDefault();
     this.nameValidationChange(this.state.name);
     this.validateFolder(this.state.folderId);
-    e.preventDefault();
     const note = (({id, name, modified, folderId, content}) => ({id, name, modified, folderId, content}))(this.state);
     const url = 'http://localhost:9090/notes';
     const options = {
@@ -89,15 +93,16 @@ export default class AddNote extends Component {
         }
       })
       .then(data => {
-        this.setState({id: '', name: '', modified: '', folderId: '', content: '', validationMessages: {name: ''}, fieldErrors: '', folderVal: '',});
+        this.props.history.push(`/folder/${this.state.folderId}`)
+        this.setState({id: '', name: '', modified: '', folderId: '', content: '', validationMessages: {name: ''}, fieldErrors: '', folderVal: ''});
+        this.props.update();
       })
       .catch(err => {
         this.setState({
           error: err.message
         });
       });
-    }
-      
+    } 
   }
 
   static defaultProps = {
@@ -122,8 +127,8 @@ export default class AddNote extends Component {
     }
   }
 
+
   render() {
-    const { folders } = this.props
     return (
       <section className='AddNote'>
         <h2>Create a note</h2>
