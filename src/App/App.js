@@ -17,18 +17,13 @@ class App extends Component {
     this.state = {
       notes: [],
       folders: [],
-      update: false
     }
-  }
-
-  renderUpdate = () => {
-    window.location.reload(true)
   }
 
   componentDidMount() {
     this.fetchNotes();
     // fake date loading from API call
-    const url = 'http://localhost:9090/folders';
+    const url = 'http://localhost:8000/api/folders';
     const options = {
       method: 'GET',
       headers: {
@@ -56,7 +51,7 @@ class App extends Component {
   }
 
   fetchNotes() {
-    const notesUrl = 'http://localhost:9090/notes';
+    const notesUrl = 'http://localhost:8000/api/notes';
     const notesOptions = {
       method: 'GET',
       headers: {
@@ -86,7 +81,6 @@ class App extends Component {
 
 
   renderNavRoutes() {
-    const { notes, folders } = this.state;
     return (
       <>
         {['/', '/folder/:folderId'].map(path =>
@@ -96,8 +90,8 @@ class App extends Component {
             path={path}
             render={routeProps =>
               <NoteListNav
-                folders={folders}
-                notes={notes}
+                folders={this.state.folders}
+                notes={this.state.notes}
                 {...routeProps}
               />
             }
@@ -107,8 +101,8 @@ class App extends Component {
           path='/note/:noteId'
           render={routeProps => {
             const { noteId } = routeProps.match.params
-            const note = findNote(notes, noteId) || {}
-            const folder = findFolder(folders, note.folderId)
+            const note = findNote(this.state.notes, noteId) || {}
+            const folder = findFolder(this.state.folders, note.folderId)
             return (
               <NotePageNav
                 {...routeProps}
@@ -141,8 +135,8 @@ class App extends Component {
             key={path}
             path={path}
             render={routeProps => {
-              const { folderId } = routeProps.match.params
-              const notesForFolder = getNotesForFolder(notes, folderId)
+              const folder_id  = window.location.pathname.slice(-1)
+              const notesForFolder = (!folder_id ? notes.filter(note => note.folder_id === folder_id) : notes)
               return (
                 <NoteListMain
                   {...routeProps}
@@ -155,7 +149,7 @@ class App extends Component {
         <Route
           path='/note/:noteId'
           render={routeProps => {
-            const { noteId } = routeProps.match.params
+            const  noteId  = window.location.pathname.slice(-1)
             const note = findNote(notes, noteId)
             return (
               <NotePageMain
@@ -187,6 +181,7 @@ class App extends Component {
 
 
   render() {
+
     return (
       <div className='App'>
         <nav className='App__nav'>

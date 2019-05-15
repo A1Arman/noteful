@@ -16,7 +16,7 @@ export default class NoteListNav extends Component {
   }
 
   componentDidMount() {
-    const url = 'http://localhost:9090/folders';
+    const url = 'http://localhost:8000/api/folders';
     const options = {
       method: 'GET',
       headers: {
@@ -57,7 +57,7 @@ export default class NoteListNav extends Component {
                 <span className='NoteListNav__num-notes'>
                   {countNotesForFolder(this.props.notes, folder.id)}
                 </span>
-                {folder.name}
+                {folder.folder_name}
               </NavLink>
             </li>
           )}

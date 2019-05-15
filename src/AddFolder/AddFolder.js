@@ -18,15 +18,13 @@ export default class AddFolder extends Component {
   handleSubmition = (e) => {
     e.preventDefault();
     const folderName = (({id, name}) => ({id, name}))(this.state);
-    const url = 'http://localhost:9090/folders';
+    const url = 'http://localhost:8000/api/folders';
     const options = {
       method: 'POST',
-      body: JSON.stringify(folderName),
-      headers: {
-        'Content-Type': 'application/json'
-      }
+     
     }
-
+    console.log(folderName)
+  
     if(this.state.name) {
       fetch(url, options)
       .then(res => {

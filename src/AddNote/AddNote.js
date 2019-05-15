@@ -23,7 +23,7 @@ export default class AddNote extends Component {
   }
 
   componentDidMount() {
-    const url = 'http://localhost:9090/folders';
+    const url = 'http://localhost:8000/api/folders';
     const options = {
       method: 'GET',
       headers: {
@@ -72,7 +72,7 @@ export default class AddNote extends Component {
     this.nameValidationChange(this.state.name);
     this.validateFolder(this.state.folderId);
     const note = (({id, name, modified, folderId, content}) => ({id, name, modified, folderId, content}))(this.state);
-    const url = 'http://localhost:9090/notes';
+    const url = 'http://localhost:8000/api/notes';
     const options = {
       method: 'POST',
       body: JSON.stringify(note),

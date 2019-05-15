@@ -10,7 +10,7 @@ import { faFolder } from '@fortawesome/free-solid-svg-icons';
 
 export default class NoteListMain extends Component {
   componentDidMount() {
-    console.log(this.props)
+    console.log(this.props.notes)
   }
   
   render() {
@@ -53,7 +53,7 @@ NoteListMain.defaultProps = {
 
 NoteListMain.propTypes = {
   notes: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.required,
+    id: PropTypes.number.required,
     name: PropTypes.string.required,
     modified: PropTypes.string
   }))
